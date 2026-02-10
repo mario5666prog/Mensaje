@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Liz</title>
+    <style>
+        :root {
+            --pink-light: #ffcad4;
+            --pink-med: #f7aef8;
+            --pink-dark: #b388eb;
+            --heart-red: #ff4d6d;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff0f3;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Pantalla de inicio */
+        #start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff0f3;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+            transition: opacity 0.8s ease;
+        }
+
+        .main-heart {
+            font-size: 80px;
+            animation: pulse 1.2s infinite;
+            margin-bottom: 20px;
+        }
+
+        .btn-open {
+            background-color: var(--heart-red);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Sobre y Carta */
+        .container {
+            display: none;
+            position: relative;
+            width: 300px;
+            height: 200px;
+            transition: transform 0.3s;
+        }
+
+        .envelope {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ff85a1;
+            z-index: 2;
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            z-index: 4;
+            border-top: 100px solid transparent;
+            border-left: 150px solid #ff85a1;
+            border-right: 150px solid #ff85a1;
+            border-bottom: 100px solid #ff5c8a;
+        }
+
+        .lid {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-top: 110px solid #ff4d6d;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 5;
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: white;
+            z-index: 3;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: transform 0.6s ease;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .letter h2 {
+            color: var(--heart-red);
+            font-size: 1.4rem;
+            margin: 0 0 10px 0;
+        }
+
+        .letter p {
+            color: #444;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Animación Abierta */
+        .active .lid {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .active .letter {
+            transform: translateY(-130px);
+            height: 250px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-float {
+            position: absolute;
+            bottom: -20px;
+            pointer-events: none;
+            animation: float Up 4s linear forwards;
+            opacity: 0.8;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen" onclick="initLove()">
+        <div class="main-heart">❤️</div>
+        <div class="btn-open">toca para abrir</div>
+    </div>
+
+    <div class="container" id="card">
+        <div class="lid"></div>
+        <div class="envelope"></div>
+        <div class="letter">
+            <h2>¡Hola, Liz! ❤️</h2>
+            <p>Solo quería recordarte lo increíble que eres. Me encantas por tu forma de ser y por la luz que irradias.</p>
+            <p style="margin-top: 10px; font-style: italic;">"Gracias por hacerme sonreír."</p>
+            <p style="margin-top: 15px; font-weight: bold; color: #ff4d6d;">¡Te quiero muchísimo!</p>
+        </div>
+    </div>
+
+    <script>
+        function initLove() {
+            // Ocultar pantalla inicio
+            document.getElementById('start-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('start-screen').style.display = 'none';
+                const card = document.getElementById('card');
+                card.style.display = 'block';
+                
+                // Abrir automáticamente después de mostrar
+                setTimeout(() => {
+                    card.classList.add('active');
+                    startHearts();
+                }, 300);
+            }, 800);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'heart-float';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animation = `floatUp ${Math.random() * 2 + 3}s linear forwards`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        function startHearts() {
+            setInterval(createHeart, 400);
+        }
+    </script>
+</body>
+</html>
+
